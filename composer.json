@@ -1,7 +1,7 @@
 {
-    "name": "adman9000/laravel-binance",
-    "description": "Implementation of Binance trading API for Laravel",
-	  "tags": ["binance", "api", "laravel"],
+    "name": "adman9000/laravel-coinmarketcap",
+    "description": "Implementation of Coinmarketcap trading API for Laravel",
+	  "tags": ["coinmarketcap", "api", "laravel"],
 	  "type": "library",
 	  "license": "MIT",
 	  "authors": [
@@ -17,16 +17,16 @@
   },
   "autoload": {
     "psr-4": {
-      "adman9000\\binance\\": "src/"
+      "adman9000\\coinmarketcap\\": "src/"
     }
   },
   "extra": {
     "laravel": {
         "providers": [
-            "adman9000\\binance\\BinanceServiceProvider"
+            "adman9000\\coinmarketcap\\CoinmarketcapServiceProvider"
         ],
         "aliases": {
-            "Binance": "adman9000\\binance\\BinanceAPIFacade"
+            "Coinmarketcap": "adman9000\\coinmarketcap\\CoinmarketcapAPIFacade"
         }
     }
 }
