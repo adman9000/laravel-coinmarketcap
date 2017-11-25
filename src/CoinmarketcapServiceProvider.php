@@ -18,7 +18,7 @@ class CoinmarketcapServiceProvider extends ServiceProvider {
 	{
 		$this->mergeConfigFrom(__DIR__.'/../config/coinmarketcap.php', 'coinmarketcap');
 		$this->app->bind('coinmarketcap', function() {
-			return new BinanceAPI(config('coinmarketcap'));
+			return new CoinmarketcapAPI(config('coinmarketcap'));
 		});
 
 		

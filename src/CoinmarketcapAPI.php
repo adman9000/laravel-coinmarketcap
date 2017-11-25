@@ -43,9 +43,14 @@ class CoinmarketcapAPI
 	 * (string) convert - return price, 24h volume, and market cap in terms of another currency. Valid values are: 
 	 * "AUD", "BRL", "CAD", "CHF", "CLP", "CNY", "CZK", "DKK", "EUR", "GBP", "HKD", "HUF", "IDR", "ILS", "INR", "JPY", "KRW", "MXN", "MYR", "NOK", "NZD", "PHP", "PKR", "PLN", "RUB", "SEK", "SGD", "THB", "TRY", "TWD", "ZAR"
      */
-    public function getTicker($start=0, $limit=0, $convert=false)
+    public function getTicker($start=FALSE, $limit=FALSE, $convert=FALSE)
     {
-        return $this->request("v1/ticker", array("start"=>$start, "limit"=>$limit, "convert"=>$convert));
+
+        $params = array();
+        if($start!==FALSE) $params['start'] = $start;
+        if($limit!==FALSE) $params['limit'] = $limit;
+        if($convert!==FALSE) $params['convert'] = $convert;
+        return $this->request("v1/ticker/", $params);
     }
 
 
@@ -68,13 +73,14 @@ class CoinmarketcapAPI
 		
         //Get result
         $result = curl_exec($this->curl);
+
         if($result===false)
             throw new \Exception('CURL error: ' . curl_error($this->curl));
 
          // decode results
         $result = json_decode($result, true);
         if(!is_array($result))
-            throw new CoinmarketcapAPIException('JSON decode error');
+            throw new \Exception('JSON decode error');
 
         return $result;
 
