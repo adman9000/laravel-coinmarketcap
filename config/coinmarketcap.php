@@ -22,4 +22,17 @@ return [
         'api'  => 'https://api.coinmarketcap.com/'
     ],
 
+
+    /*
+    |--------------------------------------------------------------------------
+    | API Settings
+    |--------------------------------------------------------------------------
+    |
+    | CoinMarketCap API settings
+    |
+     */
+
+    'settings' => [
+        'ssl'    => env('CMC_SSL_VERIFYPEER', true)
+    ],
 ];
