@@ -55,7 +55,6 @@ class CoinmarketcapAPI
      /**
      * Get global data
      *
-     
      * @return total_market_cap_usd, total_24h_volume_usd, bitcoin_percentage_of_market_cap, active_currencies, active_assets, active_markets,last_updated
 	 * Optional parameters:
 	 * (string) convert - return price, 24h volume, and market cap in terms of another currency. Valid values are: 
