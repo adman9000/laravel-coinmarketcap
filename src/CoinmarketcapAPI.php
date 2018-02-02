@@ -52,8 +52,20 @@ class CoinmarketcapAPI
         if($convert!==FALSE) $params['convert'] = $convert;
         return $this->request("v1/ticker/", $params);
     }
-
-
+     /**
+     * Get global data
+     *
+     * @return total_market_cap_usd, total_24h_volume_usd, bitcoin_percentage_of_market_cap, active_currencies, active_assets, active_markets,last_updated
+	 * Optional parameters:
+	 * (string) convert - return price, 24h volume, and market cap in terms of another currency. Valid values are: 
+	 * "AUD", "BRL", "CAD", "CHF", "CLP", "CNY", "CZK", "DKK", "EUR", "GBP", "HKD", "HUF", "IDR", "ILS", "INR", "JPY", "KRW", "MXN", "MYR", "NOK", "NZD", "PHP", "PKR", "PLN", "RUB", "SEK", "SGD", "THB", "TRY", "TWD", "ZAR"
+     */
+    public function getGlobal($convert=FALSE)
+    {
+        $params = array();
+        if($convert!==FALSE) $params['convert'] = $convert;
+        return $this->request("v1/global/", $params);
+    }
 
     private function request($url, $params = [], $method = "GET") {
 
