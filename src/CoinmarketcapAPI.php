@@ -11,47 +11,69 @@ class CoinmarketcapAPI
 
     /**
      * Constructor for BinanceAPI
-     *
      */
     function __construct()
     {
-        $this->url = config('coinmarketcap.urls.api');
+        $this->url  = config('coinmarketcap.urls.api');
         $this->curl = curl_init();
-        curl_setopt_array($this->curl, array(
-            CURLOPT_SSL_VERIFYPEER => true,
+
+        curl_setopt_array($this->curl, [
+            CURLOPT_SSL_VERIFYPEER => config('binance.settings.ssl'),
             CURLOPT_SSL_VERIFYHOST => 2,
-            CURLOPT_USERAGENT => 'CMC PHP API Agent',
-           // CURLOPT_POST => true,
-            CURLOPT_RETURNTRANSFER => true)
-        );
-        
+            CURLOPT_USERAGENT      => 'CMC PHP API Agent',
+            CURLOPT_RETURNTRANSFER => true
+        ]);
     }
 
+    /**
+     * Deconstruct cURL
+     */
     function __destruct()
     {
         curl_close($this->curl);
     }
-	
 
-     /**
-     * Get ticker
+
+    /**
+     * Get tickers
      *
-     * @return asset pair ticker info
-	 * Optional parameters:
-	 * (int) start - return results from rank [start] and above
-	 * (int) limit - return a maximum of [limit] results (default is 100, use 0 to return all results)
-	 * (string) convert - return price, 24h volume, and market cap in terms of another currency. Valid values are: 
-	 * "AUD", "BRL", "CAD", "CHF", "CLP", "CNY", "CZK", "DKK", "EUR", "GBP", "HKD", "HUF", "IDR", "ILS", "INR", "JPY", "KRW", "MXN", "MYR", "NOK", "NZD", "PHP", "PKR", "PLN", "RUB", "SEK", "SGD", "THB", "TRY", "TWD", "ZAR"
+     * @param string      $ticker  Return a ticker
+     * @param bool|string $convert Return price, 24h volume, and market cap in terms of another currency. Valid values are
+     *                             "AUD", "BRL", "CAD", "CHF", "CLP", "CNY", "CZK", "DKK", "EUR", "GBP", "HKD", "HUF",
+     *                             "IDR", "ILS", "INR", "JPY", "KRW", "MXN", "MYR", "NOK", "NZD", "PHP", "PKR", "PLN",
+     *                             "RUB", "SEK", "SGD", "THB", "TRY", "TWD", "ZAR"
+     * @return mixed
+     * @throws \Exception
      */
-    public function getTicker($start=FALSE, $limit=FALSE, $convert=FALSE)
+    public function getTicker($ticker, $convert = false)
     {
+        $params = [];
+        if($convert !== false) $params['convert'] = $convert;
 
-        $params = array();
-        if($start!==FALSE) $params['start'] = $start;
-        if($limit!==FALSE) $params['limit'] = $limit;
-        if($convert!==FALSE) $params['convert'] = $convert;
-        return $this->request("v1/ticker/", $params);
+        return $this->request("v1/ticker/{$ticker}/", $params);
     }
+
+    /**
+     * Get tickers
+     *
+     * @param bool|int    $start   Return results from rank [start] and above
+     * @param bool|int    $limit   Return a maximum of [limit] results (default is 100, use 0 to return all results)
+     * @param bool|string $convert Return price, 24h volume, and market cap in terms of another currency. Valid values are
+     *                             "AUD", "BRL", "CAD", "CHF", "CLP", "CNY", "CZK", "DKK", "EUR", "GBP", "HKD", "HUF",
+     *                             "IDR", "ILS", "INR", "JPY", "KRW", "MXN", "MYR", "NOK", "NZD", "PHP", "PKR", "PLN",
+     *                             "RUB", "SEK", "SGD", "THB", "TRY", "TWD", "ZAR"
+     * @return mixed
+     * @throws \Exception
+     */
+    public function getTickers($start = false, $limit = false, $convert = false)
+    {
+        $params = [];
+        if($start !== false)   $params['start']   = $start;
+        if($limit !== false)   $params['limit']   = $limit;
+        if($convert !== false) $params['convert'] = $convert;
+
+        return $this->request('v1/ticker/', $params);
+}
      /**
      * Get global data
      *
@@ -65,28 +87,35 @@ class CoinmarketcapAPI
         $params = array();
         if($convert!==FALSE) $params['convert'] = $convert;
         return $this->request("v1/global/", $params);
+
     }
 
-    private function request($url, $params = [], $method = "GET") {
-
-
+    /**
+     * @param $url
+     * @param array $params
+     * @param string $method
+     * @return mixed
+     * @throws \Exception
+     */
+    private function request($url, $params = [], $method = 'GET')
+    {
         //Add post vars
-        if($method == "POST") {
-            curl_setopt($ch,CURLOPT_POST, count($params));
+        if($method == 'POST') {
+            curl_setopt($this->curl, CURLOPT_POST, count($params));
             curl_setopt($this->curl, CURLOPT_POSTFIELDS, $params);
         }
-		else if(sizeof($params)>0) {
-			$url .= "?".http_build_query($params);
-		}
-		
+        else if(sizeof($params)>0) {
+            $url .= '?'.http_build_query($params);
+        }
+
         // Set URL & Header
         curl_setopt($this->curl, CURLOPT_URL, $this->url . $url);
         curl_setopt($this->curl, CURLOPT_HTTPHEADER, array());
-		
+
         //Get result
         $result = curl_exec($this->curl);
 
-        if($result===false)
+        if($result === false)
             throw new \Exception('CURL error: ' . curl_error($this->curl));
 
          // decode results
@@ -95,7 +124,7 @@ class CoinmarketcapAPI
             throw new \Exception('JSON decode error');
 
         return $result;
-
     }
+
 
 }
