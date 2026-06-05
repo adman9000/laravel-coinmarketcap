@@ -1,26 +1,15 @@
 # laravel-coinmarketcap
-Laravel implementation of Coinmarketcap API for tracking cryptocurrencies
 
-## Install
+> **This package is abandoned and no longer maintained.**
+>
+> CoinMarketCap shut down the unauthenticated v1 API in 2018. This package targets those endpoints and **will not work**. No further updates are planned.
 
-#### Install via Composer
+## Alternatives
 
-```
-composer require adman9000/laravel-coinmarketcap
-```
+If you need to integrate CoinMarketCap data into a Laravel application, consider:
 
-Utilises autoloading in Laravel 5.5+. For older versions add the following lines to your `config/app.php`
+- [**CoinGecko**](https://www.coingecko.com/en/api) — more generous free tier, no credit card required. Well-maintained PHP clients are available on Packagist.
+- [`tigusigalpa/coinmarketcap-php`](https://github.com/tigusigalpa/coinmarketcap-php) — PHP wrapper targeting the current CMC API (v1/v2/v3 with key auth), last updated 2026.
+- [`wasdevlab/coinmarketcap-laravel-api`](https://github.com/wasdevlab/coinmarketcap-laravel-api) — Laravel-specific wrapper for the current CMC API, last updated 2025.
 
-```php
-'providers' => [
-        ...
-        adman9000\coinmarketcap\CoinmarketcapServiceProvider::class,
-        ...
-    ],
-
-
- 'aliases' => [
-        ...
-        'Coinmarketcap' => adman9000\coinmarketcap\CoinmarketcapAPIFacade::class,
-    ],
-```
+Note: CoinMarketCap's free tier now requires registration and is limited to ~333 calls/day.
